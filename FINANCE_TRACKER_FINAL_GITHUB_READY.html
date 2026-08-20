@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Money & Scholarship Manager</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#687386;--line:#e6eaf0;--primary:#2563eb;--primary2:#1d4ed8;--green:#0f9d58;--red:#dc2626;--amber:#b7791f;--shadow:0 10px 30px rgba(20,35,65,.07);--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh}.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1250px;margin:auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--primary);color:white;display:grid;place-items:center;font-weight:800}.brand h1{font-size:17px;margin:0}.brand span{font-size:12px;color:var(--muted)}
+.container{max-width:1250px;margin:auto;padding:24px 20px 50px}.nav{display:flex;gap:8px;overflow:auto;padding-bottom:4px;margin-bottom:22px}.nav{display:none!important}.back-btn{border:1px solid var(--line);background:#fff;color:var(--muted);padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-bottom:12px}
+.back-btn:hover{background:#eef4ff;color:var(--primary);border-color:#cbdcff}\n.dashboard-content{margin-top:4px}.dashboard-home{margin-bottom:8px}
+.dashboard-content .summary{margin-top:0}
+.dashboard-content .card{min-height:0}
+.dashboard-content .section-title h3{font-size:17px}\n.app-launcher{display:flex;flex-direction:row;flex-wrap:nowrap;gap:10px;margin:0 0 22px;max-width:100%;width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 2px 10px}
+.app-icon{border:1px solid var(--line);background:#fff;border-radius:14px;width:100px;height:96px;min-width:100px;flex:0 0 100px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;box-shadow:var(--shadow);color:var(--text);transition:.15s ease;text-align:center}
+.app-icon:hover{transform:translateY(-2px);border-color:#cbdcff;box-shadow:0 14px 34px rgba(20,35,65,.10)}
+.app-icon.active{border-color:#9dbbff;background:#eef4ff;color:var(--primary)}
+.app-icon .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#eef2f7;font-size:23px}
+.app-icon.active .icon{background:#dbe8ff}
+.app-icon .label{font-size:12px;font-weight:800;text-align:center;line-height:1.2}
+@media(max-width:900px){.app-launcher{display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;width:100%}}
+@media(max-width:500px){.app-launcher{gap:8px}.app-icon{width:82px;height:82px;flex-basis:82px;padding:7px 4px;border-radius:12px}.app-icon .icon{width:34px;height:34px;border-radius:10px;font-size:17px}.app-icon .label{font-size:9px}}.nav button{border:1px solid var(--line);background:white;color:var(--muted);padding:10px 14px;border-radius:11px;white-space:nowrap}.nav button.active{background:#eaf1ff;color:var(--primary);border-color:#cbdcff;font-weight:700}
+.page{display:none}.page.active{display:block}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.page-head h2{margin:0 0 5px;font-size:26px}.page-head p{margin:0;color:var(--muted)}
+.grid{display:grid;gap:16px}.summary{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}.metric-label{color:var(--muted);font-size:13px}.metric{font-size:27px;font-weight:800;margin-top:8px;letter-spacing:-.5px}.metric.green{color:var(--green)}.metric.red{color:var(--red)}.metric.blue{color:var(--primary)}
+.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #d8dee8;border-radius:11px;padding:11px 12px;background:#fff;color:var(--text);outline:none}.field textarea{min-height:90px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#8fb1ff;box-shadow:0 0 0 3px #eaf1ff}.file-note{font-size:11px;color:var(--muted)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:700}.btn.primary{background:var(--primary);color:white}.btn.primary:hover{background:var(--primary2)}.btn.secondary{background:#eef2f7;color:#344054}.btn.danger{background:#feecec;color:var(--red)}.btn.small{padding:7px 10px;font-size:12px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.section-title h3{margin:0;font-size:16px}.hint{font-size:12px;color:var(--muted)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}.table th{background:#f8fafc;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.table tr:last-child td{border-bottom:0}.in{color:var(--green);font-weight:800}.out{color:var(--red);font-weight:800}.pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.pill.green{background:#e9f8ef;color:var(--green)}.pill.amber{background:#fff5df;color:var(--amber)}.pill.gray{background:#eef1f5;color:#667085}.empty{padding:34px;text-align:center;color:var(--muted)}
+.activity{display:flex;flex-direction:column}.activity-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.activity-row:last-child{border-bottom:0}.activity-main{display:flex;gap:11px}.dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 auto}.dot.in{background:var(--green)}.dot.out{background:var(--red)}.activity-title{font-weight:700;font-size:13px}.activity-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.filterbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.filterbar input,.filterbar select{border:1px solid var(--line);background:white;border-radius:10px;padding:9px 11px}
+.notice{padding:12px 14px;border-radius:12px;background:#f0f6ff;color:#31558f;font-size:12px;margin-bottom:14px}.warning{background:#fff8e7;color:#8a6417}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.42);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.open{display:flex}.modal-box{width:min(560px,100%);max-height:90vh;overflow:auto;background:white;border-radius:18px;padding:20px;box-shadow:0 25px 70px rgba(0,0,0,.2)}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0}.icon-btn{border:0;background:#eef2f7;border-radius:9px;width:34px;height:34px}
+.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:white;padding:12px 15px;border-radius:11px;display:none;z-index:80;box-shadow:var(--shadow)}.toast.show{display:block}
+.balance-note{font-size:12px;color:var(--muted);margin-top:8px}.positive-card{background:linear-gradient(135deg,#eef6ff,#fff)}.negative-balance{color:var(--red)!important}
+@media(max-width:900px){.summary{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}}
+@media(max-width:600px){.container{padding:16px 12px 35px}.topbar-inner{padding:13px 12px}.brand span{display:none}.summary{grid-template-columns:1fr 1fr;gap:10px}.card{padding:15px}.metric{font-size:21px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.page-head{flex-direction:column}.page-head h2{font-size:22px}.nav button{padding:9px 11px}.summary .card{min-width:0}}
+
+.daily-register .day-sheet{border:1px solid var(--line);border-radius:15px;margin-bottom:14px;overflow:hidden;background:#fff}
+.daily-register .day-sheet:last-child{margin-bottom:0}
+.day-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 16px;background:#f7f9fc;border-bottom:1px solid var(--line)}
+.day-date{font-size:16px;font-weight:800}
+.day-total{font-weight:800;color:var(--red)}
+.day-table{width:100%;border-collapse:collapse}
+.day-table th,.day-table td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13px;text-align:left}
+.day-table th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#fff}
+.day-table tr:last-child td{border-bottom:0}
+.day-table .amount{text-align:right;font-weight:800;color:var(--red)}
+.day-table .row-actions{text-align:right;white-space:nowrap}
+.day-footer{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:13px 16px;background:#fbfcfe;border-top:1px solid var(--line);font-weight:800}
+.day-footer .total-value{color:var(--red)}
+@media(max-width:600px){.day-head{align-items:flex-start;flex-direction:column;gap:5px}.day-table th,.day-table td{padding:10px 9px}.day-table .category{display:none}}
+
+.opening-splash{
+  position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#f7f9fc,#eef4ff);opacity:1;visibility:visible;
+  transition:opacity .45s ease,visibility .45s ease;
+}
+.opening-splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-content{text-align:center;animation:splashUp .7s cubic-bezier(.22,1,.36,1) both}
+.splash-mark{
+  width:76px;height:76px;margin:0 auto 18px;border-radius:22px;display:grid;place-items:center;
+  background:#2563eb;color:#fff;font-size:34px;font-weight:900;
+  box-shadow:0 16px 38px rgba(37,99,235,.22);animation:markIn .6s ease both;
+}
+.splash-title{font-size:22px;font-weight:900;letter-spacing:.12em;color:#162033;animation:fadeIn .55s .12s both}
+.splash-subtitle{margin-top:7px;font-size:13px;color:#64748b;animation:fadeIn .55s .22s both}
+.splash-line{width:150px;height:3px;margin:22px auto 0;border-radius:99px;background:#dbe5f5;overflow:hidden}
+.splash-line span{display:block;height:100%;width:0;background:#2563eb;border-radius:99px;animation:loadLine .8s .18s ease-out forwards}
+@keyframes splashUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes markIn{from{opacity:0;transform:scale(.75) rotate(-5deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes loadLine{to{width:100%}}
+@media(prefers-reduced-motion:reduce){
+  .opening-splash,.splash-content,.splash-mark,.splash-title,.splash-subtitle,.splash-line span{animation:none!important;transition:none!important}
+}
+.dashboard-welcome{font-weight:800}
+.feature-hero{margin-bottom:16px;text-align:center;padding:28px 20px}
+.feature-badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;padding:7px 10px;border-radius:999px;background:#eef4ff;color:#2563eb;margin-bottom:12px}
+.feature-hero h3{font-size:22px;margin:0 0 7px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feature-card{transition:transform .18s ease,box-shadow .18s ease}
+.feature-card:hover{transform:translateY(-2px)}
+.feature-icon{font-size:28px;margin-bottom:9px}
+.feature-card h3{margin:0 0 6px;font-size:16px}
+.feature-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+@media(max-width:900px){.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.feature-grid{grid-template-columns:1fr}.feature-hero h3{font-size:19px}}
+
+.print-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.print-option{min-height:52px;text-align:left}
+@media(max-width:560px){.print-options{grid-template-columns:1fr}}
+@media print{
+  body.printing *{visibility:hidden!important}
+  body.printing #printReport,body.printing #printReport *{visibility:visible!important}
+  body.printing #printReport{position:absolute;left:0;top:0;width:100%;padding:24px;background:#fff;color:#111}
+}
+
+.pdf-preview-panel{margin-top:18px;border:1px solid var(--border,#e5e7eb);border-radius:14px;overflow:hidden;background:#fff}
+.pdf-preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border,#e5e7eb)}
+#pdfPreviewFrame{display:block;width:100%;height:650px;border:0;background:#f3f4f6}
+@media(max-width:600px){#pdfPreviewFrame{height:520px}}
+</style>
+</head>
+<body>
+
+<div id="openingSplash" class="opening-splash" aria-label="Finance Tracker loading">
+  <div class="splash-content">
+    <div class="splash-mark">₹</div>
+    <div class="splash-title">FINANCE TRACKER</div>
+    <div class="splash-subtitle">Student Money Manager</div>
+    <div class="splash-line"><span></span></div>
+  </div>
+</div>
+
+<div class="app">
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div class="brand-mark">₹</div><div><h1>Student Money Manager</h1><span>Scholarships • Spending • Loans • Bills</span></div></div>
+    <button class="btn secondary" id="profileTopBtn" type="button">👤 Profile</button>
+  </div>
+</header>
+<main class="container">
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <button data-page="dashboard" class="active">Dashboard</button>
+    <button data-page="scholarships">Scholarships</button>
+    <button data-page="relatives">Relatives</button>
+    <button data-page="spending">Spending & Balance</button>
+    <button data-page="bills">Bills</button>
+    <button data-page="loans">Loans</button>
+  </nav>
+
+  <section class="page active" id="page-dashboard">
+    <div class="dashboard-home">
+      <div class="page-head">
+      <div>
+        <h2 id="dashboardWelcome" class="dashboard-welcome">Welcome</h2>
+        <p>Your financial position at a glance.</p>
+      </div>
+    </div>
+    </div>
+    <div class="app-launcher" id="appLauncher">
+      <button class="app-icon active" data-page="dashboard"><span class="icon">⌂</span><span class="label">Dashboard</span></button>
+      <button class="app-icon" data-page="scholarships"><span class="icon">🎓</span><span class="label">Scholarships</span></button>
+      <button class="app-icon" data-page="relatives"><span class="icon">👥</span><span class="label">Relatives</span></button>
+      <button class="app-icon" data-page="spending"><span class="icon">₹</span><span class="label">Spending &amp; Balance</span></button>
+      <button class="app-icon" data-page="bills"><span class="icon">🧾</span><span class="label">Bills</span></button>
+      <button class="app-icon" data-page="loans"><span class="icon">💳</span><span class="label">Loans</span></button>
+    </div>
+    <div class="dashboard-content">
+    <div class="grid summary">
+      <div class="card"><div class="metric-label">Starting Balance</div><div class="metric blue" id="m-start">₹0</div></div>
+      <div class="card"><div class="metric-label">Total Received</div><div class="metric green" id="m-received">₹0</div><div class="balance-note">Daily received + loans (scholarships excluded)</div></div>
+      <div class="card"><div class="metric-label">Total Spent</div><div class="metric red" id="m-spent">₹0</div></div>
+      <div class="card positive-card"><div class="metric-label">Current Balance</div><div class="metric green" id="m-balance">₹0</div></div>
+    </div>
+    <div class="grid two">
+      <div class="card">
+        <div class="section-title"><h3>Balance Setup</h3><span class="hint">Used as the beginning amount</span></div>
+        <div class="form-grid">
+          <div class="field"><label for="startingBalance">Starting Balance</label><input id="startingBalance" type="number" min="0" step="0.01" placeholder="10000"></div>
+        </div>
+        <div class="actions"><button class="btn primary" id="saveStarting">Save Starting Balance</button></div>
+        <div class="balance-note">Scholarship records are tracked separately and do NOT change Current Balance. Relative money, bill payments, and loan repayments are also excluded from Current Balance.</div>
+      </div>
+      <div class="card">
+        <div class="section-title"><h3>Scholarship Summary</h3></div>
+        <div class="grid three">
+          <div><div class="metric-label">Government</div><div class="metric" id="govTotal">₹0</div></div>
+          <div><div class="metric-label">Organization</div><div class="metric" id="orgTotal">₹0</div></div>
+          <div><div class="metric-label">Scholarships</div><div class="metric" id="schCount">0</div></div>
+        </div>
+        <div class="balance-note" id="latestScholarship">Latest Scholarship: —</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="section-title"><h3>Recent Activity</h3><button class="btn secondary small" data-goto="spending">View all</button></div>
+      <div id="recentActivity" class="activity"></div>
+    </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-scholarships">
+    <div class="page-head"><div><button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button><h2>Government / Organization Scholarship</h2><p>Record scholarship money that actually reaches you.</p></div></div>
+    <div class="card">
+      <div class="notice">Scholarships are tracked separately and do <strong>not</strong> change Current Balance. Supporting documents are stored with the record.</div>
+      <form id="scholarshipForm">
+        <input type="hidden" id="scholarshipId">
+        <div class="form-grid">
+          <div class="field"><label>Source Type</label><select id="schSource"><option value="Government">Government</option><option value="Organization">Organization</option></select></div>
+          <div class="field" id="schemeWrap"><label>Government Scheme Name</label><input id="schemeName" placeholder="e.g. Post-Matric Scholarship"></div>
+          <div class="field" id="orgWrap" style="display:none"><label>Organization Name</label><input id="orgName" placeholder="e.g. XYZ Foundation"></div>
+          <div class="field"><label>Amount Received</label><input id="schAmount" type="number" min="0.01" step="0.01" required placeholder="25000"></div>
+          <div class="field"><label>Date Received</label><input id="schDate" type="date" required></div>
+          <div class="field"><label>Cheque Number</label><input id="chequeNumber" placeholder="Optional"></div>
+          <div class="field full"><label>Supporting Document</label><input id="schFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"><div class="file-note">Cheque scan/photo, scholarship document, receipt, or other relevant file.</div></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Save Scholarship</button><button class="btn secondary" type="button" id="schCancel" style="display:none">Cancel Edit</button></div>
+      </form>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="section-title"><h3>Scholarship Records</h3></div><div id="scholarshipTable"></div></div>
+  </section>
+
+  <section class="page" id="page-relatives">
+    <div class="page-head"><div><button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button><h2>Money Received from Relatives</h2><p>A separate history — never included in Current Balance.</p></div></div>
+    <div class="card">
+      <div class="notice warning">Important: money recorded here does <strong>not</strong> add to or subtract from Current Balance.</div>
+      <form id="relativeForm">
+        <input type="hidden" id="relativeId">
+        <div class="form-grid">
+          <div class="field"><label>Relative's Name</label><input id="relativeName" required placeholder="Name"></div>
+          <div class="field"><label>Amount</label><input id="relativeAmount" type="number" min="0.01" step="0.01" required placeholder="10000"></div>
+          <div class="field"><label>Date</label><input id="relativeDate" type="date" required></div>
+          <div class="field"><label>Reason</label><input id="relativeReason" placeholder="Travel, fees, personal support..."></div>
+          <div class="field full"><label>Supporting Document</label><input id="relativeFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Save Relative Record</button><button class="btn secondary" type="button" id="relativeCancel" style="display:none">Cancel Edit</button></div>
+      </form>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="section-title"><h3>Relative Money History</h3></div><div id="relativeTable"></div></div>
+  </section>
+
+  <section class="page" id="page-spending">
+    <div class="page-head">
+      <div>
+        <button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button>
+        <h2>Spending &amp; Balance</h2>
+        <p>Manage your money received and your daily spending register.</p>
+      </div>
+    </div>
+
+    <div class="grid summary">
+      <div class="card"><div class="metric-label">Starting Balance</div><div class="metric blue" id="s-start">₹0</div></div>
+      <div class="card"><div class="metric-label">Total Received</div><div class="metric green" id="s-received">₹0</div></div>
+      <div class="card"><div class="metric-label">Total Spending</div><div class="metric red" id="s-spent">₹0</div></div>
+      <div class="card"><div class="metric-label">Current Balance</div><div class="metric green" id="s-balance">₹0</div></div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="section-title"><h3>Money Received</h3><span class="hint">Adds to Current Balance</span></div>
+        <form id="incomeForm">
+          <input type="hidden" id="incomeId">
+          <div class="form-grid">
+            <div class="field"><label>Amount</label><input id="incomeAmount" type="number" min="0.01" step="0.01" required></div>
+            <div class="field"><label>Date</label><input id="incomeDate" type="date" required></div>
+            <div class="field full"><label>Source / Reason</label><input id="incomeReason" required placeholder="Part-time work, gift, refund..."></div>
+          </div>
+          <div class="actions"><button class="btn primary" type="submit">Add Money Received</button><button class="btn secondary" type="button" id="incomeCancel" style="display:none">Cancel</button></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><h3>Add Daily Expense</h3><span class="hint">Add as many items as needed</span></div>
+        <form id="spendForm">
+          <input type="hidden" id="spendId">
+          <div class="form-grid">
+            <div class="field"><label>Date</label><input id="spendDate" type="date" required></div>
+            <div class="field"><label>Name</label><input id="spendDescription" required placeholder="Food, Bus, Books, Tea..."></div>
+            <div class="field"><label>Amount</label><input id="spendAmount" type="number" min="0.01" step="0.01" required placeholder="200"></div>
+            <div class="field"><label>Category</label><select id="spendCategory"><option>Food</option><option>Travel</option><option>College</option><option>Books</option><option>Shopping</option><option>Bills</option><option>Electronics</option><option>Entertainment</option><option>Other</option></select></div>
+          </div>
+          <div class="actions"><button class="btn primary" type="submit">+ Add Expense</button><button class="btn secondary" type="button" id="spendCancel" style="display:none">Cancel Edit</button></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card daily-register" style="margin-top:16px">
+      <div class="section-title">
+        <div>
+          <h3>Daily Spending Register</h3>
+          <div class="hint">Each date appears once, with all expenses grouped underneath.</div>
+        </div>
+      </div>
+      <div id="dailySpendingRegister"></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-bills">
+    <div class="page-head"><div><button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button><h2>Important Bills</h2><p>Remember bills without changing your balance until you actually pay.</p></div></div>
+    <div class="card">
+      <div class="notice">Adding a bill, changing its due date, or marking it pending does not change Current Balance. Use <strong>Record Payment</strong> only when you actually pay.</div>
+      <form id="billForm">
+        <input type="hidden" id="billId">
+        <div class="form-grid">
+          <div class="field"><label>Bill Name</label><input id="billName" required placeholder="Electricity Bill"></div>
+          <div class="field"><label>Date</label><input id="billDate" type="date" required></div>
+          <div class="field"><label>Bill Amount</label><input id="billAmount" type="number" min="0.01" step="0.01" required></div>
+          <div class="field"><label>Due Date</label><input id="billDue" type="date"></div>
+          <div class="field"><label>Status</label><select id="billStatus"><option>Pending</option><option>Paid</option></select></div>
+          <div class="field"><label>Notes</label><input id="billNotes" placeholder="Optional"></div>
+          <div class="field full"><label>Bill Attachment</label><input id="billFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Save Bill</button><button class="btn secondary" type="button" id="billCancel" style="display:none">Cancel Edit</button></div>
+      </form>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="section-title"><h3>Bills</h3></div><div id="billTable"></div></div>
+  </section>
+
+  <section class="page" id="page-print">
+    <div class="page-head">
+      <div>
+        <button class="back-btn" type="button" data-back-profile>← Back to Profile</button>
+        <h2>🖨️ Print</h2>
+        <p>Select a report to preview or download as PDF.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="print-options">
+        <button type="button" class="btn secondary print-option" data-print="scholarships">🎓 Scholarships</button>
+        <button type="button" class="btn secondary print-option" data-print="relatives">👨‍👩‍👧 Relatives</button>
+        <button type="button" class="btn secondary print-option" data-print="spending">💸 Spending & Balance</button>
+        <button type="button" class="btn secondary print-option" data-print="bills">🧾 Bills</button>
+        <button type="button" class="btn secondary print-option" data-print="loans">💳 Loans</button>
+        <button type="button" class="btn primary print-option" data-print="all">📄 Complete Finance Report</button>
+      </div>
+      <div id="selectedPrintReport" class="notice" style="margin-top:16px">Choose a report above.</div>
+      <div id="printActions" class="actions" style="display:none;margin-top:14px;justify-content:flex-end;flex-wrap:wrap">
+        <button type="button" class="btn secondary" id="previewPdfBtn">👁️ Preview PDF</button>
+        <button type="button" class="btn primary" id="downloadPdfBtn">⬇️ Download PDF</button>
+      </div>
+      <div id="pdfPreviewPanel" class="pdf-preview-panel" style="display:none">
+        <div class="pdf-preview-head">
+          <strong>PDF Preview</strong>
+          <button type="button" class="btn secondary small" id="closePdfPreviewBtn">Close Preview</button>
+        </div>
+        <iframe id="pdfPreviewFrame" title="PDF Preview"></iframe>
+      </div>
+      <p class="hint">Preview opens the generated PDF in a new tab. Download saves the PDF directly to your device.</p>
+    </div>
+  </section>
+
+  <section class="page" id="page-features">
+    <div class="page-head">
+      <div>
+        <button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button>
+        <h2>✨ Features</h2>
+        <p>Planned improvements for future versions of Finance Tracker.</p>
+      </div>
+    </div>
+
+    <div class="card feature-hero">
+      <div class="feature-badge">🚀 COMING IN FUTURE VERSIONS</div>
+      <h3>More powerful finance tools are coming.</h3>
+      <p class="hint">These features are planned for future updates and are not active in the current version.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="card feature-card"><div class="feature-icon">🔔</div><h3>Smart Reminders</h3><p>Bill due-date, loan repayment and scholarship reminders.</p></div>
+      <div class="card feature-card"><div class="feature-icon">📊</div><h3>Advanced Reports</h3><p>Monthly and yearly reports, spending charts and scholarship history.</p></div>
+      <div class="card feature-card"><div class="feature-icon">📱</div><h3>Multi-Device Sync</h3><p>Access and synchronize your finance records across devices.</p></div>
+      <div class="card feature-card"><div class="feature-icon">🔐</div><h3>Secure Account</h3><p>Login, protected cloud data and optional PIN or biometric lock.</p></div>
+      <div class="card feature-card"><div class="feature-icon">📄</div><h3>Advanced Documents</h3><p>Better document organization, search and preview.</p></div>
+      <div class="card feature-card"><div class="feature-icon">📤</div><h3>More Export Options</h3><p>PDF, Excel, CSV and printable financial reports.</p></div>
+      <div class="card feature-card"><div class="feature-icon">💰</div><h3>Budget Planning</h3><p>Monthly limits, category budgets and spending warnings.</p></div>
+      <div class="card feature-card"><div class="feature-icon">🌐</div><h3>Currency Support</h3><p>Support for INR and other currencies with conversion tools.</p></div>
+      <div class="card feature-card"><div class="feature-icon">☁️</div><h3>Automatic Backup</h3><p>Scheduled backups, cloud restore and backup history.</p></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-profile">
+    <div class="page-head"><div><button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button><h2>Profile</h2><p>Your name for this finance tracker.</p></div></div>
+    <div class="card" style="max-width:520px">
+      <div class="section-title"><h3>Your Name</h3></div>
+      <form id="profileForm">
+        <div class="field"><label>Name</label><input id="profileName" type="text" maxlength="80" placeholder="Enter your name"></div>
+        <div class="actions"><button class="btn primary" type="submit">Save Name</button></div>
+      </form>
+      <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
+        <div class="section-title"><h3>Data Management</h3></div>
+        <p class="hint" style="margin:0 0 12px">Export a backup before resetting. You can later import the exported file to restore your profile and finance records.</p>
+        <div class="actions" style="flex-wrap:wrap">
+          <button class="btn secondary" id="exportDataBtn" type="button">Export Data</button>
+          <button class="btn secondary" id="importDataBtn" type="button">Import Data</button><button class="btn secondary" id="restoreLocalBtn" type="button">Restore Local Backup</button>
+          <button class="btn secondary" id="downloadLocalBtn" type="button">Download Local Backup</button>
+          <input id="importDataFile" type="file" accept=".json,application/json" style="display:none"><div id="backupStatus" class="hint" style="width:100%;margin-top:8px">No local backup saved.</div>
+          <button class="btn danger" id="resetBtn" type="button">Reset Data</button>
+        <button class="btn secondary" id="featuresProfileBtn" type="button">✨ Features</button>\n        <button class="btn secondary" id="printProfileBtn" type="button">🖨️ Print</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-loans">
+    <div class="page-head"><div><button class="back-btn" type="button" data-back-dashboard>← Back to Dashboard</button><h2>Loans</h2><p>Track borrowed money separately from scholarship and personal income.</p></div></div>
+    <div class="card">
+      <div class="notice">A loan record represents money actually received, so Amount Taken is added to Current Balance. Repayments affect the balance only when you record the actual repayment.</div>
+      <form id="loanForm">
+        <input type="hidden" id="loanId">
+        <div class="form-grid">
+          <div class="field"><label>Loan Name</label><input id="loanName" required placeholder="Education Loan"></div>
+          <div class="field"><label>Amount Taken</label><input id="loanAmount" type="number" min="0.01" step="0.01" required></div>
+          <div class="field"><label>Date Taken</label><input id="loanDate" type="date" required></div>
+          <div class="field"><label>From Whom / Lender</label><input id="loanLender" required placeholder="Name / institution"></div>
+          <div class="field"><label>Reason</label><input id="loanReason" placeholder="Fees, emergency..."></div>
+          <div class="field"><label>Repayment Amount</label><input id="loanRepayment" type="number" min="0" step="0.01" placeholder="Optional"></div>
+          <div class="field"><label>Due Date</label><input id="loanDue" type="date"></div>
+          <div class="field"><label>Notes</label><input id="loanNotes" placeholder="Optional"></div>
+          <div class="field full"><label>Loan Document</label><input id="loanFile" type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Save Loan</button><button class="btn secondary" type="button" id="loanCancel" style="display:none">Cancel Edit</button></div>
+      </form>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="section-title"><h3>Loan Records</h3></div><div id="loanTable"></div></div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="modal-box"><div class="modal-head"><h3 id="modalTitle">Details</h3><button class="icon-btn" id="modalClose">×</button></div><div id="modalBody" style="margin-top:16px"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="student_money_manager_v1";
+const state=Object.assign({"profileName":""},JSON.parse(localStorage.getItem(KEY)||'{"startingBalance":0,"scholarships":[],"relatives":[],"income":[],"spending":[],"bills":[],"loans":[]}'));
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+$("page-dashboard").classList.add("active");
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));document.querySelectorAll(".app-icon").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));$("profileTopBtn").addEventListener("click",()=>showPage("profile"));
+$("featuresProfileBtn").addEventListener("click",()=>showPage("features"));document.querySelectorAll("[data-back-dashboard]").forEach(b=>b.addEventListener("click",()=>showPage("dashboard")));
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.goto)));
+
+function showPage(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("page-"+name).classList.add("active");
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  document.querySelectorAll(".app-icon").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  renderAll();
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));renderAll()}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2})}
+function escape(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(16).slice(2)}
+function fileToData(file){return new Promise((res,rej)=>{if(!file)return res(null);const r=new FileReader();r.onload=()=>res({name:file.name,type:file.type,size:file.size,data:r.result});r.onerror=rej;r.readAsDataURL(file)})}
+function calc(){
+ const scholarship=state.scholarships.reduce((a,x)=>a+Number(x.amount),0);
+ const income=state.income.reduce((a,x)=>a+Number(x.amount),0);
+ const loans=state.loans.reduce((a,x)=>a+Number(x.amount),0);
+ const spending=state.spending
+   .filter(x=>x.linkType!=="bill"&&x.linkType!=="loan")
+   .reduce((a,x)=>a+Number(x.amount),0);
+ // Scholarships are tracked separately and DO NOT affect Current Balance.
+ // Bill payments and loan repayments are tracked as records, but DO NOT reduce Current Balance.
+ const received=income+loans;
+ const balance=Number(state.startingBalance)+income+loans-spending;
+ return {scholarship,income,loans,spending,received,balance};
+}
+function allTransactions(){
+ const a=[];
+ // Scholarship records are intentionally excluded because they do not affect Current Balance.
+ state.income.forEach(x=>a.push({id:x.id,date:x.date,type:"income",label:x.reason,amount:Number(x.amount),dir:"in",source:x}));
+ state.loans.forEach(x=>a.push({id:x.id,date:x.date,type:"loan",label:x.name+" • "+x.lender,amount:Number(x.amount),dir:"in",source:x}));
+ state.spending.forEach(x=>a.push({id:x.id,date:x.date,type:"spending",label:x.description,amount:Number(x.amount),dir:"out",source:x}));
+ return a.sort((a,b)=>b.date.localeCompare(a.date));
+}
+function renderDashboardWelcome(){
+  const el=document.getElementById("dashboardWelcome");
+  if(!el)return;
+  const name=String(state.profileName||"").trim();
+  el.textContent=name ? "Welcome "+name : "Welcome";
+}
+
+function renderAll(){
+  renderDashboardWelcome();renderDashboard();renderScholarships();renderRelatives();renderHistory();renderBills();renderLoans();$("startingBalance").value=state.startingBalance||""}
+function renderDashboard(){
+ const c=calc();
+ ["m-start","s-start"].forEach(id=>$(id).textContent=money(state.startingBalance));
+ ["m-received","s-received"].forEach(id=>$(id).textContent=money(c.received));
+ ["m-spent","s-spent"].forEach(id=>$(id).textContent=money(c.spending));
+ ["m-balance","s-balance"].forEach(id=>{ $(id).textContent=money(c.balance);$(id).classList.toggle("negative-balance",c.balance<0)});
+ const gov=state.scholarships.filter(x=>x.source==="Government").reduce((a,x)=>a+Number(x.amount),0);
+ const org=state.scholarships.filter(x=>x.source==="Organization").reduce((a,x)=>a+Number(x.amount),0);
+ $("govTotal").textContent=money(gov);$("orgTotal").textContent=money(org);$("schCount").textContent=state.scholarships.length;
+ const latest=[...state.scholarships].sort((a,b)=>b.date.localeCompare(a.date))[0];
+ $("latestScholarship").textContent=latest?`Latest Scholarship: ${money(latest.amount)} • ${latest.date}`:"Latest Scholarship: —";
+ const acts=allTransactions().slice(0,7);
+ $("recentActivity").innerHTML=acts.length?acts.map(activityHTML).join(""):'<div class="empty">No balance-affecting transactions yet.</div>';
+}
+function activityHTML(x){return `<div class="activity-row"><div class="activity-main"><span class="dot ${x.dir}"></span><div><div class="activity-title">${escape(x.label||x.type)}</div><div class="activity-sub">${x.date} • ${typeName(x.type)}</div></div></div><div class="${x.dir}">${x.dir==="out"?"−":"+"}${money(x.amount)}</div></div>`}
+function typeName(t){return {scholarship:"Scholarship",income:"Money Received",spending:"Spending",loan:"Loan"}[t]||t}
+function table(headers,rows){return rows.length?`<div class="table-wrap"><table class="table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`:'<div class="empty">No records yet.</div>'}
+function fileButton(file){return file?`<button class="btn secondary small" onclick='viewFile(${JSON.stringify(file)})'>View file</button>`:"—"}
+window.viewFile=f=>{
+  if(!f||!f.data){toast("No document is attached.");return}
+  $("modalTitle").textContent=f.name||"Supporting Document";
+  const type=f.type||"";
+  let body="";
+  if(type.startsWith("image/")){
+    body=`<div style="text-align:center"><img src="${f.data}" alt="${escape(f.name||"document")}" style="max-width:100%;max-height:70vh;border-radius:10px"></div>`;
+  }else if(type==="application/pdf"||type.startsWith("text/")||type.includes("word")||type.includes("sheet")||type.includes("excel")||type.includes("presentation")){
+    body=`<iframe src="${f.data}" title="${escape(f.name||"document")}" style="width:100%;height:70vh;border:1px solid #e6eaf0;border-radius:10px;background:#fff"></iframe>`;
+  }else{
+    body=`<div class="notice">This file type may not be previewable directly in the browser.</div><a class="btn primary" href="${f.data}" download="${escape(f.name||"document")}">Open / Save Document</a>`;
+  }
+  $("modalBody").innerHTML=body;
+  $("modal").classList.add("open");
+}
+function renderScholarships(){
+ const rows=state.scholarships.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<tr><td>${x.date}</td><td><strong>${escape(x.source)}</strong><br><span class="hint">${escape(x.source==="Government"?x.schemeName:x.orgName)}</span></td><td class="in">+${money(x.amount)}</td><td>${escape(x.cheque||"—")}</td><td>${fileButton(x.file)}</td><td><button class="btn secondary small" onclick="editScholarship('${x.id}')">Edit</button> <button type="button" class="btn danger small" data-delete-scholarship="${escape(x.id)}">Delete</button></td></tr>`);
+ $("scholarshipTable").innerHTML=table(["Date","Source","Amount","Cheque","Document","Actions"],rows);
+ $("scholarshipTable").querySelectorAll("[data-delete-scholarship]").forEach(btn=>{
+   btn.addEventListener("click",e=>{
+     e.preventDefault();
+     e.stopPropagation();
+     deleteScholarship(btn.dataset.deleteScholarship);
+   });
+ });
+}
+function renderRelatives(){
+ const rows=state.relatives.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<tr><td>${x.date}</td><td><strong>${escape(x.name)}</strong><br><span class="hint">${escape(x.reason||"—")}</span></td><td>${money(x.amount)}</td><td><span class="pill gray">Excluded from balance</span></td><td>${fileButton(x.file)}</td><td><button class="btn secondary small" onclick="editRelative('${x.id}')">Edit</button> <button type="button" class="btn danger small" data-delete-relative="${escape(x.id)}">Delete</button></td></tr>`);
+ $("relativeTable").innerHTML=table(["Date","Relative","Amount","Balance Effect","Document","Actions"],rows);
+ $("relativeTable").querySelectorAll("[data-delete-relative]").forEach(btn=>{
+   btn.addEventListener("click",e=>{
+     e.preventDefault();
+     e.stopPropagation();
+     deleteRelative(btn.dataset.deleteRelative);
+   });
+ });
+}
+function renderHistory(){
+ const groups={};
+ state.spending.slice().sort((a,b)=>b.date.localeCompare(a.date)||String(a.id).localeCompare(String(b.id))).forEach(x=>{
+   if(!groups[x.date]) groups[x.date]=[];
+   groups[x.date].push(x);
+ });
+ const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+ const container=$("dailySpendingRegister");
+ if(!dates.length){
+   container.innerHTML='<div class="empty">No daily spending yet. Add your first expense above.</div>';
+   return;
+ }
+ container.innerHTML=dates.map(date=>{
+   const items=groups[date];
+   const total=items.reduce((sum,x)=>sum+Number(x.amount),0);
+   const d=new Date(date+"T00:00:00");
+   const pretty=d.toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
+   const rows=items.map((x,i)=>`<tr>
+      <td>${i+1}</td>
+      <td><strong>${escape(x.description)}</strong></td>
+      <td class="category">${escape(x.category||"Other")}</td>
+      <td class="amount">−${money(x.amount)}</td>
+      <td class="row-actions">
+        <button class="btn secondary small" onclick="editTransaction('spending','${x.id}')">Edit</button>
+        <button type="button" class="btn danger small" onclick="deleteDailyExpense('${x.id}')">Delete</button>
+      </td>
+   </tr>`).join("");
+   return `<div class="day-sheet">
+      <div class="day-head"><div class="day-date">${pretty}</div><div class="day-total">Total Spending: −${money(total)}</div></div>
+      <table class="day-table">
+        <thead><tr><th>#</th><th>Name</th><th class="category">Category</th><th style="text-align:right">Amount</th><th style="text-align:right">Actions</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="day-footer"><span>Total Spending Today</span><span class="total-value">−${money(total)}</span></div>
+   </div>`;
+ }).join("");
+}
+function renderBills(){
+ const rows=state.bills.slice().sort((a,b)=>(a.status==="Pending"?0:1)-(b.status==="Pending"?0:1)||String(b.due||"").localeCompare(String(a.due||""))).map(x=>`<tr><td>${escape(x.name)}</td><td>${x.date}</td><td>${money(Math.max(0,Number(x.amount)-state.spending.filter(p=>p.linkType==="bill"&&String(p.linkId)===String(x.id)).reduce((a,p)=>a+Number(p.amount),0)))}</td><td>${x.due||"—"}</td><td><span class="pill ${x.status==="Paid"?"green":"amber"}">${x.status}</span></td><td>${x.file?fileButton(x.file):"—"}</td><td>${x.status==="Pending"?`<button type="button" class="btn primary small" onclick="recordBillPayment('${x.id}')">Record Payment</button> `:""}<button type="button" class="btn secondary small" onclick="editBill('${x.id}')">Edit</button> <button type="button" class="btn danger small" onclick="showDeleteBillModal('${x.id}')">Delete</button></td></tr>`);
+ $("billTable").innerHTML=table(["Bill","Date","Amount","Due Date","Status","Attachment","Actions"],rows);
+}
+document.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-bill-delete]");
+  if(!btn)return;
+  openBillDeleteConfirmation(btn.getAttribute("data-bill-delete"));
+});
+
+function showDeleteBillModal(id){
+  const bill = state.bills.find(b => String(b.id) === String(id));
+  if(!bill){
+    toast("Bill not found.");
+    return;
+  }
+
+  $("modalTitle").textContent = "Delete Bill?";
+  $("modalBody").innerHTML = `
+    <div class="notice warning">
+      Delete <strong>${escape(bill.name)}</strong> for <strong>${money(bill.amount)}</strong>?
+      <br><br>This action cannot be undone.
+    </div>
+    <div class="actions" style="justify-content:flex-end">
+      <button type="button" class="btn secondary" id="cancelBillDeleteFinal">Cancel</button>
+      <button type="button" class="btn danger" id="confirmBillDeleteFinal">Delete Bill</button>
+    </div>`;
+  $("modal").classList.add("open");
+
+  $("cancelBillDeleteFinal").onclick = function(){
+    $("modal").classList.remove("open");
+  };
+
+  $("confirmBillDeleteFinal").onclick = function(){
+    const index = state.bills.findIndex(b => String(b.id) === String(id));
+    if(index === -1){
+      $("modal").classList.remove("open");
+      toast("Bill not found.");
+      return;
+    }
+    state.bills.splice(index, 1);
+    // Remove any actual payment linked to this bill.
+    state.spending = state.spending.filter(x =>
+      !(x.linkType === "bill" && String(x.linkId) === String(id))
+    );
+    save();
+    $("modal").classList.remove("open");
+    toast("Bill deleted successfully.");
+  };
+}
+
+
+function recordBillPayment(id){
+  const bill=state.bills.find(x=>String(x.id)===String(id));
+  if(!bill){toast("Bill not found.");return}
+  $("modalTitle").textContent="Record Bill Payment";
+  $("modalBody").innerHTML=`<div class="notice">Record the actual payment for <strong>${escape(bill.name)}</strong>.<br><br>Remaining amount: <strong>${money(Math.max(0,Number(bill.amount)-state.spending.filter(x=>x.linkType==="bill"&&String(x.linkId)===String(bill.id)).reduce((sum,x)=>sum+Number(x.amount),0)))}</strong><br>This payment will reduce the bill amount and be deducted from Current Balance.</div>
+  <div class="form-grid" style="margin-top:14px">
+    <div class="field"><label>Payment Amount</label><input id="billPaymentAmount" type="number" min="0.01" step="0.01" value="${Math.max(0,Number(bill.amount)-state.spending.filter(x=>x.linkType==="bill"&&String(x.linkId)===String(bill.id)).reduce((sum,x)=>sum+Number(x.amount),0))}"></div>
+    <div class="field"><label>Payment Date</label><input id="billPaymentDate" type="date" value="${today()}"></div>
+  </div>
+  <div class="actions" style="justify-content:flex-end">
+    <button type="button" class="btn secondary" id="cancelBillPayment">Cancel</button>
+    <button type="button" class="btn primary" id="confirmBillPayment">Record Payment</button>
+  </div>`;
+  $("modal").classList.add("open");
+  $("cancelBillPayment").onclick=()=>$("modal").classList.remove("open");
+  $("confirmBillPayment").onclick=()=>{
+    const amount=Number($("billPaymentAmount").value);
+    if(!amount||amount<=0){toast("Enter a valid payment amount.");return}
+    const previousPaid=state.spending
+      .filter(x=>x.linkType==="bill"&&String(x.linkId)===String(bill.id))
+      .reduce((sum,x)=>sum+Number(x.amount),0);
+    if(previousPaid+amount>Number(bill.amount)){
+      toast("Payment exceeds the remaining bill amount.");
+      return;
+    }
+    state.spending.push({id:uid(),amount,date:$("billPaymentDate").value||today(),category:"Bills",description:"Bill payment — "+bill.name,linkType:"bill",linkId:bill.id});
+    const totalPaid=previousPaid+amount;
+    bill.status=totalPaid>=Number(bill.amount)?"Paid":"Pending";
+    save(); $("modal").classList.remove("open");
+    toast(bill.status==="Paid"?"Bill fully paid.":"Partial bill payment recorded.");
+  };
+}
+
+function recordLoanRepayment(id){
+  const loan=state.loans.find(x=>String(x.id)===String(id));
+  if(!loan){toast("Loan not found.");return}
+  $("modalTitle").textContent="Record Loan Repayment";
+  $("modalBody").innerHTML=`<div class="notice">Record an actual repayment for <strong>${escape(loan.name)}</strong>.<br><br>Remaining loan amount: <strong>${money(Math.max(0,Number(loan.amount)-state.spending.filter(x=>x.linkType==="loan"&&String(x.linkId)===String(loan.id)).reduce((sum,x)=>sum+Number(x.amount),0)))}</strong>.<br>This repayment will reduce the remaining loan amount and be deducted from Current Balance.</div>
+  <div class="form-grid" style="margin-top:14px">
+    <div class="field"><label>Repayment Amount</label><input id="loanPaymentAmount" type="number" min="0.01" step="0.01" value="${Math.max(0,Number(loan.amount)-state.spending.filter(x=>x.linkType==="loan"&&String(x.linkId)===String(loan.id)).reduce((sum,x)=>sum+Number(x.amount),0))}"></div>
+    <div class="field"><label>Payment Date</label><input id="loanPaymentDate" type="date" value="${today()}"></div>
+  </div>
+  <div class="actions" style="justify-content:flex-end">
+    <button type="button" class="btn secondary" id="cancelLoanPayment">Cancel</button>
+    <button type="button" class="btn primary" id="confirmLoanPayment">Record Repayment</button>
+  </div>`;
+  $("modal").classList.add("open");
+  $("cancelLoanPayment").onclick=()=>$("modal").classList.remove("open");
+  $("confirmLoanPayment").onclick=()=>{
+    const amount=Number($("loanPaymentAmount").value);
+    if(!amount||amount<=0){toast("Enter a valid repayment amount.");return}
+    const previousRepaid=state.spending
+      .filter(x=>x.linkType==="loan"&&String(x.linkId)===String(loan.id))
+      .reduce((sum,x)=>sum+Number(x.amount),0);
+    const loanTotal=Number(loan.amount);
+    if(previousRepaid+amount>loanTotal){
+      toast("Repayment exceeds the remaining loan amount.");
+      return;
+    }
+    state.spending.push({id:uid(),amount,date:$("loanPaymentDate").value||today(),category:"Loan Repayment",description:"Loan repayment — "+loan.name,linkType:"loan",linkId:loan.id});
+    const totalRepaid=previousRepaid+amount;
+    loan.repaid=totalRepaid;
+    loan.remaining=Math.max(0,loanTotal-totalRepaid);
+    loan.status=totalRepaid>=loanTotal?"Paid":"Active";
+    save(); $("modal").classList.remove("open");
+    toast(loan.status==="Paid"?"Loan fully repaid.":"Partial loan repayment recorded.");
+  };
+}
+
+function showDeleteLoanModal(id){
+  const loan=state.loans.find(x=>String(x.id)===String(id));
+  if(!loan){
+    toast("Loan not found.");
+    return;
+  }
+
+  $("modalTitle").textContent="Delete Loan?";
+  $("modalBody").innerHTML=`
+    <div class="notice warning">
+      Delete <strong>${escape(loan.name)}</strong> for <strong>${money(loan.amount)}</strong>?
+      <br><br>This action cannot be undone. Any repayment transaction linked to this loan will also be removed.
+    </div>
+    <div class="actions" style="justify-content:flex-end">
+      <button type="button" class="btn secondary" id="cancelLoanDeleteFinal">Cancel</button>
+      <button type="button" class="btn danger" id="confirmLoanDeleteFinal">Delete Loan</button>
+    </div>`;
+
+  $("modal").classList.add("open");
+
+  $("cancelLoanDeleteFinal").onclick=function(){
+    $("modal").classList.remove("open");
+  };
+
+  $("confirmLoanDeleteFinal").onclick=function(){
+    const index=state.loans.findIndex(x=>String(x.id)===String(id));
+    if(index===-1){
+      $("modal").classList.remove("open");
+      toast("Loan not found.");
+      return;
+    }
+
+    state.loans.splice(index,1);
+    state.spending=state.spending.filter(x=>!(
+      x.linkType==="loan" && String(x.linkId)===String(id)
+    ));
+
+    save();
+    $("modal").classList.remove("open");
+    toast("Loan deleted successfully.");
+  };
+}
+
+function renderLoans(){
+ const rows=state.loans.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>{
+  const rep=Number(x.repayment||0), paid=state.spending.filter(s=>s.linkType==="loan"&&s.linkId===x.id).reduce((a,s)=>a+Number(s.amount),0), outstanding=Math.max(0,rep-paid);
+  return `<tr><td><strong>${escape(x.name)}</strong><br><span class="hint">${escape(x.lender)}</span></td><td>${x.date}</td><td class="in">+${money(x.amount)}</td><td>${money(rep)}</td><td>${money(outstanding)}</td><td>${x.due||"—"}</td><td>${x.file?fileButton(x.file):"—"}</td><td>${rep>paid?`<button class="btn primary small" onclick="recordLoanRepayment('${x.id}')">Record Repayment</button> `:""}<button class="btn secondary small" onclick="editLoan('${x.id}')">Edit</button> <button type="button" class="btn danger small" onclick="showDeleteLoanModal('${x.id}')">Delete</button></td></tr>`});
+ $("loanTable").innerHTML=table(["Loan / Lender","Date","Taken","Repayment","Outstanding","Due Date","Document","Actions"],rows);
+}
+
+$("schSource").addEventListener("change",()=>{const g=$("schSource").value==="Government";$("schemeWrap").style.display=g?"flex":"none";$("orgWrap").style.display=g?"none":"flex"});
+$("saveStarting").addEventListener("click",()=>{const v=Number($("startingBalance").value);if(v<0||!Number.isFinite(v))return toast("Enter a valid starting balance.");state.startingBalance=v;save();toast("Starting balance saved.")});
+function resetForm(id){$(id).reset();const h=$(id).querySelector('input[type="hidden"]');if(h)h.value="";$(id).querySelectorAll("input[type=file]").forEach(x=>x.value="")}
+function resetAllForms(){
+  ["scholarshipForm","relativeForm","incomeForm","spendForm","billForm","loanForm"].forEach(id=>{if($(id))resetForm(id)});
+  ["schCancel","relativeCancel","incomeCancel","spendCancel","billCancel","loanCancel"].forEach(id=>{if($(id))$(id).style.display="none"});
+  $("schDate").value=$("relativeDate").value=$("incomeDate").value=$("spendDate").value=$("billDate").value=$("loanDate").value=today();
+}
+function bindForm(formId,handler){$(formId).addEventListener("submit",async e=>{e.preventDefault();try{await handler();save();toast("Saved successfully.");}catch(err){console.error(err);toast("Could not save this record.")}})}
+bindForm("scholarshipForm",async()=>{
+ const id=$("scholarshipId").value;const old=state.scholarships.find(x=>x.id===id);const f=await fileToData($("schFile").files[0]);
+ const x={id:id||uid(),source:$("schSource").value,schemeName:$("schemeName").value.trim(),orgName:$("orgName").value.trim(),amount:Number($("schAmount").value),date:$("schDate").value,cheque:$("chequeNumber").value.trim(),file:f||old?.file||null};
+ if(!x.amount||!x.date)return toast("Amount and date are required.");
+ if(x.source==="Government"&&!x.schemeName)return toast("Enter the government scheme name.");
+ if(x.source==="Organization"&&!x.orgName)return toast("Enter the organization name.");
+ if(id)Object.assign(old,x);else state.scholarships.push(x);resetForm("scholarshipForm");$("schDate").value=today();$("schCancel").style.display="none";$("schSource").dispatchEvent(new Event("change"));
+});
+bindForm("relativeForm",async()=>{
+ const id=$("relativeId").value;const old=state.relatives.find(x=>x.id===id);const f=await fileToData($("relativeFile").files[0]);
+ const x={id:id||uid(),name:$("relativeName").value.trim(),amount:Number($("relativeAmount").value),date:$("relativeDate").value,reason:$("relativeReason").value.trim(),file:f||old?.file||null};
+ if(!x.name||!x.amount||!x.date)return toast("Name, amount and date are required.");
+ if(id)Object.assign(old,x);else state.relatives.push(x);resetForm("relativeForm");$("relativeDate").value=today();$("relativeCancel").style.display="none";
+});
+bindForm("incomeForm",async()=>{
+ const id=$("incomeId").value;const x={id:id||uid(),amount:Number($("incomeAmount").value),date:$("incomeDate").value,reason:$("incomeReason").value.trim(),category:"Other"};
+ if(!x.amount||!x.date||!x.reason)return toast("Amount, date and source/reason are required.");
+ const old=state.income.find(y=>y.id===id);if(id)Object.assign(old,x);else state.income.push(x);resetForm("incomeForm");$("incomeDate").value=today();$("incomeCancel").style.display="none";
+});
+bindForm("spendForm",async()=>{
+ const id=$("spendId").value;const x={id:id||uid(),amount:Number($("spendAmount").value),date:$("spendDate").value,category:$("spendCategory").value,description:$("spendDescription").value.trim()};
+ if(!x.amount||!x.date||!x.description)return toast("Amount, date and description are required.");
+ const old=state.spending.find(y=>y.id===id);if(id)Object.assign(old,x);else state.spending.push(x);resetForm("spendForm");$("spendDate").value=today();$("spendCancel").style.display="none";
+});
+bindForm("billForm",async()=>{
+ const id=$("billId").value;const old=state.bills.find(x=>x.id===id);const f=await fileToData($("billFile").files[0]);
+ const x={id:id||uid(),name:$("billName").value.trim(),amount:Number($("billAmount").value),date:$("billDate").value,due:$("billDue").value,status:$("billStatus").value,notes:$("billNotes").value.trim(),file:f||old?.file||null};
+ if(!x.name||!x.amount||!x.date)return toast("Bill name, amount and date are required.");
+ if(id)Object.assign(old,x);else state.bills.push(x);resetForm("billForm");$("billDate").value=today();$("billCancel").style.display="none";
+});
+bindForm("loanForm",async()=>{
+ const id=$("loanId").value;const old=state.loans.find(x=>x.id===id);const f=await fileToData($("loanFile").files[0]);
+ const x={id:id||uid(),name:$("loanName").value.trim(),amount:Number($("loanAmount").value),date:$("loanDate").value,lender:$("loanLender").value.trim(),reason:$("loanReason").value.trim(),repayment:Number($("loanRepayment").value||0),due:$("loanDue").value,notes:$("loanNotes").value.trim(),file:f||old?.file||null};
+ if(!x.name||!x.amount||!x.date||!x.lender)return toast("Loan name, amount, date and lender are required.");
+ if(id)Object.assign(old,x);else state.loans.push(x);resetForm("loanForm");$("loanDate").value=today();$("loanCancel").style.display="none";
+});
+function editScholarship(id){const x=state.scholarships.find(y=>y.id===id);if(!x)return;$("scholarshipId").value=x.id;$("schSource").value=x.source;$("schemeName").value=x.schemeName;$("orgName").value=x.orgName;$("schAmount").value=x.amount;$("schDate").value=x.date;$("chequeNumber").value=x.cheque||"";$("schSource").dispatchEvent(new Event("change"));$("schCancel").style.display="inline-block";showPage("scholarships");scrollTo(0,0)}
+function editRelative(id){const x=state.relatives.find(y=>y.id===id);if(!x)return;$("relativeId").value=x.id;$("relativeName").value=x.name;$("relativeAmount").value=x.amount;$("relativeDate").value=x.date;$("relativeReason").value=x.reason||"";$("relativeCancel").style.display="inline-block";showPage("relatives");scrollTo(0,0)}
+function editBill(id){const x=state.bills.find(y=>y.id===id);if(!x)return;$("billId").value=x.id;$("billName").value=x.name;$("billAmount").value=x.amount;$("billDate").value=x.date;$("billDue").value=x.due||"";$("billStatus").value=x.status;$("billNotes").value=x.notes||"";$("billCancel").style.display="inline-block";showPage("bills");scrollTo(0,0)}
+function editLoan(id){const x=state.loans.find(y=>y.id===id);if(!x)return;$("loanId").value=x.id;$("loanName").value=x.name;$("loanAmount").value=x.amount;$("loanDate").value=x.date;$("loanLender").value=x.lender;$("loanReason").value=x.reason||"";$("loanRepayment").value=x.repayment||"";$("loanDue").value=x.due||"";$("loanNotes").value=x.notes||"";$("loanCancel").style.display="inline-block";showPage("loans");scrollTo(0,0)}
+function editTransaction(type,id){if(type==="income"){const x=state.income.find(y=>y.id===id);if(!x)return;$("incomeId").value=x.id;$("incomeAmount").value=x.amount;$("incomeDate").value=x.date;$("incomeReason").value=x.reason;$("incomeCancel").style.display="inline-block";showPage("spending")}else if(type==="spending"){const x=state.spending.find(y=>y.id===id);if(!x)return;$("spendId").value=x.id;$("spendAmount").value=x.amount;$("spendDate").value=x.date;$("spendCategory").value=x.category;$("spendDescription").value=x.description;$("spendCancel").style.display="inline-block";showPage("spending")}else if(type==="loan")editLoan(id)}
+function deleteScholarship(id){
+  const index=state.scholarships.findIndex(x=>String(x.id)===String(id));
+  if(index===-1){toast("Scholarship record not found.");return false;}
+  const record=state.scholarships[index];
+  const label=record.source==="Government"?record.schemeName:record.orgName;
+  // by embedded HTML artifact previews.
+  $("modalTitle").textContent="Delete Scholarship?";
+  $("modalBody").innerHTML=
+    `<p style="margin:0 0 8px;font-weight:700">${escape(label||"Scholarship record")}</p>
+     <p style="margin:0;color:var(--muted)">Amount: <strong>${money(record.amount)}</strong></p>
+     <p style="margin:12px 0 0;color:var(--red);font-size:13px">Scholarship records are tracked separately and do not affect Current Balance.</p>
+     <div class="actions">
+       <button type="button" class="btn danger" id="confirmDeleteScholarship">Delete Record</button>
+       <button type="button" class="btn secondary" id="cancelDeleteScholarship">Cancel</button>
+     </div>`;
+  $("modal").classList.add("open");
+  $("confirmDeleteScholarship").onclick=()=>{
+    const latestIndex=state.scholarships.findIndex(x=>String(x.id)===String(id));
+    if(latestIndex===-1){$("modal").classList.remove("open");toast("Scholarship record not found.");return;}
+    state.scholarships.splice(latestIndex,1);
+    $("modal").classList.remove("open");
+    save();
+    toast("Scholarship deleted successfully.");
+  };
+  $("cancelDeleteScholarship").onclick=()=>$("modal").classList.remove("open");
+  return true;
+}
+function deleteRelative(id){
+  const index=state.relatives.findIndex(x=>String(x.id)===String(id));
+  if(index===-1){toast("Relative record not found.");return false;}
+  const record=state.relatives[index];
+  $("modalTitle").textContent="Delete Relative Record?";
+  $("modalBody").innerHTML=
+    `<p style="margin:0 0 8px;font-weight:700">${escape(record.name||"Relative record")}</p>
+     <p style="margin:0;color:var(--muted)">Amount: <strong>${money(record.amount)}</strong></p>
+     <p style="margin:12px 0 0;color:var(--muted);font-size:13px">This record is excluded from Current Balance.</p>
+     <div class="actions">
+       <button type="button" class="btn danger" id="confirmDeleteRelative">Delete Record</button>
+       <button type="button" class="btn secondary" id="cancelDeleteRelative">Cancel</button>
+     </div>`;
+  $("modal").classList.add("open");
+  $("confirmDeleteRelative").onclick=()=>{
+    const latestIndex=state.relatives.findIndex(x=>String(x.id)===String(id));
+    if(latestIndex===-1){$("modal").classList.remove("open");toast("Relative record not found.");return;}
+    state.relatives.splice(latestIndex,1);
+    $("modal").classList.remove("open");
+    save();
+    toast("Relative record deleted successfully.");
+  };
+  $("cancelDeleteRelative").onclick=()=>$("modal").classList.remove("open");
+  return true;
+}
+
+
+function openBillDeleteConfirmation(id){
+  const bill=state.bills.find(item=>String(item.id)===String(id));
+  if(!bill){
+    toast("Bill record not found.");
+    return;
+  }
+
+  $("modalTitle").textContent="Delete Bill";
+  $("modalBody").innerHTML=
+    '<div class="notice warning">'+
+    'Are you sure you want to delete <strong>'+escape(bill.name)+'</strong> for <strong>'+money(bill.amount)+'</strong>?'+
+    '<br><br>This action cannot be undone.'+
+    '</div>'+
+    '<div class="actions" style="justify-content:flex-end;margin-top:18px">'+
+    '<button type="button" class="btn secondary" id="billDeleteCancelBtn">Cancel</button>'+
+    '<button type="button" class="btn danger" id="billDeleteConfirmBtn">Delete Bill</button>'+
+    '</div>';
+
+  $("modal").classList.add("open");
+
+  const cancel=$("billDeleteCancelBtn");
+  const confirmBtn=$("billDeleteConfirmBtn");
+
+  cancel.onclick=function(){
+    $("modal").classList.remove("open");
+  };
+
+  confirmBtn.onclick=function(){
+    const index=state.bills.findIndex(item=>String(item.id)===String(id));
+    if(index===-1){
+      $("modal").classList.remove("open");
+      toast("Bill record not found.");
+      return;
+    }
+
+    state.bills.splice(index,1);
+    state.spending=state.spending.filter(item=>!(
+      item.linkType==="bill" && String(item.linkId)===String(id)
+    ));
+
+    save();
+    $("modal").classList.remove("open");
+    toast("Bill deleted successfully.");
+  };
+}
+
+function deleteDailyExpense(id){
+  const index=state.spending.findIndex(x=>String(x.id)===String(id));
+  if(index===-1){toast("Expense not found.");return}
+  const expense=state.spending[index];
+
+  $("modalTitle").textContent="Delete Expense?";
+  $("modalBody").innerHTML=`
+    <div class="notice warning">
+      Are you sure you want to delete <strong>${escape(expense.description)}</strong> for <strong>${money(expense.amount)}</strong>?
+      <br><br>This will immediately update the day's total and Current Balance.
+    </div>
+    <div class="actions" style="justify-content:flex-end">
+      <button type="button" class="btn secondary" id="cancelExpenseDelete">Cancel</button>
+      <button type="button" class="btn danger" id="confirmExpenseDelete">Delete Expense</button>
+    </div>`;
+
+  $("modal").classList.add("open");
+
+  $("cancelExpenseDelete").onclick=()=>{
+    $("modal").classList.remove("open");
+  };
+
+  $("confirmExpenseDelete").onclick=()=>{
+    const currentIndex=state.spending.findIndex(x=>String(x.id)===String(id));
+    if(currentIndex!==-1) state.spending.splice(currentIndex,1);
+    save();
+    $("modal").classList.remove("open");
+    toast("Expense deleted successfully.");
+  };
+}
+
+["schCancel","relativeCancel","incomeCancel","spendCancel","billCancel","loanCancel"].forEach(id=>$(id).addEventListener("click",()=>{const map={schCancel:"scholarshipForm",relativeCancel:"relativeForm",incomeCancel:"incomeForm",spendCancel:"spendForm",billCancel:"billForm",loanCancel:"loanForm"};resetForm(map[id]);$(id).style.display="none"}));
+$("schDate").value=$("relativeDate").value=$("incomeDate").value=$("spendDate").value=$("billDate").value=$("loanDate").value=today();
+
+
+const BACKUP_DB_NAME="FinanceTrackerBackupDB";
+const BACKUP_STORE="backups";
+
+function openBackupDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(BACKUP_DB_NAME,1);
+    req.onupgradeneeded=()=>req.result.createObjectStore(BACKUP_STORE,{keyPath:"id"});
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function saveLocalBackup(backup){
+  const db=await openBackupDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BACKUP_STORE,"readwrite");
+    tx.objectStore(BACKUP_STORE).put({id:"latest",savedAt:new Date().toISOString(),backup});
+    tx.oncomplete=()=>{db.close();resolve()};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+  });
+}
+async function getLocalBackup(){
+  const db=await openBackupDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BACKUP_STORE,"readonly");
+    const req=tx.objectStore(BACKUP_STORE).get("latest");
+    req.onsuccess=()=>{db.close();resolve(req.result||null)};
+    req.onerror=()=>{db.close();reject(req.error)};
+  });
+}
+async function deleteLocalBackup(){
+  const db=await openBackupDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BACKUP_STORE,"readwrite");
+    tx.objectStore(BACKUP_STORE).delete("latest");
+    tx.oncomplete=()=>{db.close();resolve()};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+  });
+}
+
+
+
+async function downloadLocalBackup(){
+  try{
+    const record=await getLocalBackup();
+    if(!record){toast("No local backup is available. Export your data first.");return}
+    const json=JSON.stringify(record.backup,null,2);
+    const blob=new Blob([json],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const filename=`finance-tracker-local-backup-${new Date().toISOString().slice(0,10)}.json`;
+    const link=document.createElement("a");
+    link.href=url;
+    link.download=filename;
+    link.setAttribute("download",filename);
+    link.style.position="fixed";
+    link.style.left="-9999px";
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(()=>{link.remove();URL.revokeObjectURL(url)},3000);
+    toast("Local backup download started.");
+  }catch(e){toast("Could not download the local backup.")}
+}
+
+async function restoreLocalBackup(){
+  try{
+    const record=await getLocalBackup();
+    if(!record){
+      toast("No local backup is available.");
+      return;
+    }
+    const d=record.backup.data;
+    $("modalTitle").textContent="Restore Local Backup?";
+    $("modalBody").innerHTML=`
+      <div class="notice warning">
+        Backup saved on <strong>${new Date(record.savedAt).toLocaleString("en-IN")}</strong>.
+        <br><br>Restoring will replace the current tracker data.
+      </div>
+      <div class="actions" style="justify-content:flex-end">
+        <button type="button" class="btn secondary" id="cancelLocalRestore">Cancel</button>
+        <button type="button" class="btn primary" id="confirmLocalRestore">Restore Backup</button>
+      </div>`;
+    $("modal").classList.add("open");
+    $("cancelLocalRestore").onclick=()=>$("modal").classList.remove("open");
+    $("confirmLocalRestore").onclick=()=>{
+      state.profileName=String(d.profileName||"");
+      state.startingBalance=Number(d.startingBalance)||0;
+      state.scholarships=Array.isArray(d.scholarships)?d.scholarships:[];
+      state.relatives=Array.isArray(d.relatives)?d.relatives:[];
+      state.income=Array.isArray(d.income)?d.income:[];
+      state.spending=Array.isArray(d.spending)?d.spending:[];
+      state.bills=Array.isArray(d.bills)?d.bills:[];
+      state.loans=Array.isArray(d.loans)?d.loans:[];
+      save();
+      $("modal").classList.remove("open");
+      resetAllForms();
+      if($("profileName"))$("profileName").value=state.profileName;
+      renderAll();
+      toast("Local backup restored successfully.");
+      showPage("dashboard");
+    };
+  }catch(e){toast("Could not restore the local backup.")}
+}
+
+async function updateBackupStatus(){
+  try{
+    const record=await getLocalBackup();
+    const el=$("backupStatus");
+    if(!el)return;
+    el.textContent=record
+      ? "Local backup saved in this browser: "+new Date(record.savedAt).toLocaleString("en-IN")+" • Use Download Local Backup to create a visible .json file."
+      : "No local backup saved.";
+  }catch(e){}
+}
+async function exportFinanceData(){
+  const backup={
+    app:"Finance Tracker",
+    version:1,
+    exportedAt:new Date().toISOString(),
+    data:{
+      profileName:state.profileName||"",
+      startingBalance:Number(state.startingBalance)||0,
+      scholarships:state.scholarships,
+      relatives:state.relatives,
+      income:state.income,
+      spending:state.spending,
+      bills:state.bills,
+      loans:state.loans
+    }
+  };
+
+  try{
+    await saveLocalBackup(backup);
+
+    const json=JSON.stringify(backup,null,2);
+    const blob=new Blob([json],{type:"application/json"});
+    const filename=`finance-tracker-backup-${new Date().toISOString().slice(0,10)}.json`;
+
+    // Use the browser's native download mechanism.
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=url;
+    link.download=filename;
+    link.setAttribute("download",filename);
+    link.style.position="fixed";
+    link.style.left="-9999px";
+    document.body.appendChild(link);
+    link.click();
+
+    setTimeout(()=>{
+      link.remove();
+      URL.revokeObjectURL(url);
+    },3000);
+
+    updateBackupStatus();
+    toast("Backup created. Check your browser's Downloads.");
+  }catch(err){
+    console.error(err);
+    toast("Backup could not be created.");
+  }
+}function importFinanceData(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const backup=JSON.parse(reader.result);
+      const d=backup.data||backup;
+      if(!d||typeof d!=="object")throw new Error("Invalid backup.");
+      if(!Array.isArray(d.scholarships)||!Array.isArray(d.relatives)||!Array.isArray(d.income)||
+         !Array.isArray(d.spending)||!Array.isArray(d.bills)||!Array.isArray(d.loans)){
+        throw new Error("This is not a valid Finance Tracker backup.");
+      }
+
+      $("modalTitle").textContent="Restore Backup?";
+      $("modalBody").innerHTML=`
+        <div class="notice warning">
+          Importing this backup will replace the current tracker data with the data from the selected file.
+          <br><br><strong>Export your current data first if you want to keep it.</strong>
+        </div>
+        <div class="actions" style="justify-content:flex-end">
+          <button type="button" class="btn secondary" id="cancelImport">Cancel</button>
+          <button type="button" class="btn primary" id="confirmImport">Restore Backup</button>
+        </div>`;
+      $("modal").classList.add("open");
+
+      $("cancelImport").onclick=()=>$("modal").classList.remove("open");
+      $("confirmImport").onclick=()=>{
+        state.profileName=String(d.profileName||"");
+        state.startingBalance=Number(d.startingBalance)||0;
+        state.scholarships=Array.isArray(d.scholarships)?d.scholarships:[];
+        state.relatives=Array.isArray(d.relatives)?d.relatives:[];
+        state.income=Array.isArray(d.income)?d.income:[];
+        state.spending=Array.isArray(d.spending)?d.spending:[];
+        state.bills=Array.isArray(d.bills)?d.bills:[];
+        state.loans=Array.isArray(d.loans)?d.loans:[];
+        save();
+        $("modal").classList.remove("open");
+        resetAllForms();
+        if($("profileName"))$("profileName").value=state.profileName;
+        renderAll();
+        toast("Backup restored successfully.");
+        showPage("dashboard");
+      };
+    }catch(err){
+      toast("Invalid or corrupted backup file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+$("exportDataBtn").addEventListener("click",exportFinanceData);
+$("restoreLocalBtn").addEventListener("click",restoreLocalBackup);
+$("downloadLocalBtn").addEventListener("click",downloadLocalBackup);
+updateBackupStatus();
+$("importDataBtn").addEventListener("click",()=>$("importDataFile").click());
+$("importDataFile").addEventListener("change",e=>{
+  const file=e.target.files&&e.target.files[0];
+  if(file)importFinanceData(file);
+  e.target.value="";
+});
+
+$("resetBtn").addEventListener("click",()=>{
+  $("modalTitle").textContent="Reset All Data?";
+  $("modalBody").innerHTML=`
+    <div class="notice warning">This will permanently remove your profile name, starting balance, scholarships, relatives, income, spending, bills, loans, and saved document records from this browser.</div>
+    <div class="actions" style="justify-content:flex-end">
+      <button type="button" class="btn secondary" id="cancelReset">Cancel</button>
+      <button type="button" class="btn danger" id="confirmReset">Reset Everything</button>
+    </div>`;
+  $("modal").classList.add("open");
+  $("cancelReset").onclick=()=>$("modal").classList.remove("open");
+  $("confirmReset").onclick=()=>{
+    localStorage.removeItem(KEY);
+    state.startingBalance=0; state.profileName=""; state.scholarships=[]; state.relatives=[]; state.income=[]; state.spending=[]; state.bills=[]; state.loans=[];
+    $("modal").classList.remove("open");
+    resetAllForms(); if($("profileName")) $("profileName").value=""; renderAll(); toast("All data has been reset.");
+  };
+});
+$("modalClose").addEventListener("click",()=>$("modal").classList.remove("open"));$("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.remove("open")});
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
+$("resetBtn").addEventListener("click",()=>{
+  $("modalTitle").textContent="Reset All Data?";
+  $("modalBody").innerHTML=`
+    <div class="notice warning">
+      This will permanently remove your profile name and all scholarship records, relative records, income, spending, bills, loans, documents, and starting balance saved in this browser.
+    </div>
+    <div class="actions" style="justify-content:flex-end">
+      <button type="button" class="btn secondary" id="cancelReset">Cancel</button>
+      <button type="button" class="btn danger" id="confirmReset">Reset Everything</button>
+    </div>`;
+  $("modal").classList.add("open");
+  $("cancelReset").onclick=()=>$("modal").classList.remove("open");
+  $("confirmReset").onclick=()=>{
+    localStorage.removeItem(KEY);
+    state.profileName="";
+    state.startingBalance=0;
+    state.scholarships=[];
+    state.relatives=[];
+    state.income=[];
+    state.spending=[];
+    state.bills=[];
+    state.loans=[];
+    $("modal").classList.remove("open");
+    if($("profileName")) $("profileName").value="";
+    resetAllForms();
+    renderAll();
+    toast("All data has been reset.");
+    showPage("dashboard");
+  };
+});
+$("profileName").value=state.profileName||"";
+$("profileForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  state.profileName=$("profileName").value.trim();
+  save();
+  renderDashboardWelcome();
+  toast(state.profileName?"Name saved successfully.":"Name cleared.");
+});
+
+(function(){
+  const splash=$("openingSplash");
+  if(!splash)return;
+
+  let soundPlayed=false;
+  function playOpeningSound(){
+    if(soundPlayed)return;
+    soundPlayed=true;
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return;
+      const ctx=new AC();
+      const now=ctx.currentTime;
+      const gain=ctx.createGain();
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.045,now+0.035);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.55);
+      gain.connect(ctx.destination);
+
+      const osc=ctx.createOscillator();
+      osc.type="sine";
+      osc.frequency.setValueAtTime(440,now);
+      osc.frequency.exponentialRampToValueAtTime(660,now+0.16);
+      osc.frequency.exponentialRampToValueAtTime(880,now+0.36);
+      osc.connect(gain);
+      osc.start(now);
+      osc.stop(now+0.55);
+    }catch(e){}
+  }
+
+  // Browsers may block autoplay audio. The first user interaction starts the sound if needed.
+  const start=()=>{playOpeningSound();window.removeEventListener("pointerdown",start);window.removeEventListener("keydown",start)};
+  window.addEventListener("pointerdown",start,{once:true});
+  window.addEventListener("keydown",start,{once:true});
+
+  setTimeout(()=>{
+    splash.classList.add("hide");
+    setTimeout(()=>splash.remove(),500);
+  },1050);
+})();
+
+
+
+function escPrint(v){
+  return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function printMoney(v){return money(Number(v)||0)}
+
+function printRows(type){
+  if(type==="scholarships"){
+    return {
+      title:"Scholarship Report",
+      headers:["Date","Source","Type","Amount"],
+      rows:state.scholarships.map(x=>[
+        x.date||"—",
+        x.sourceType==="Government"?(x.scheme||"Government"):(x.organization||"Organization"),
+        x.sourceType||"—",
+        printMoney(x.amount)
+      ])
+    };
+  }
+  if(type==="relatives"){
+    return {
+      title:"Money Received From Relatives",
+      headers:["Date","Relative","Reason","Amount"],
+      rows:state.relatives.map(x=>[x.date||"—",x.name||"—",x.reason||"—",printMoney(x.amount)])
+    };
+  }
+  if(type==="spending"){
+    const rows=state.spending
+      .filter(x=>x.linkType!=="bill"&&x.linkType!=="loan")
+      .map(x=>[x.date||"—",x.description||"—",x.category||"—","-"+printMoney(x.amount)]);
+    return {
+      title:"Spending & Balance Report",
+      headers:["Date","Description","Category","Spent"],
+      rows
+    };
+  }
+  if(type==="bills"){
+    return {
+      title:"Bills Report",
+      headers:["Bill","Date","Original Amount","Remaining","Due Date","Status"],
+      rows:state.bills.map(x=>{
+        const paid=state.spending.filter(p=>p.linkType==="bill"&&String(p.linkId)===String(x.id))
+          .reduce((a,p)=>a+Number(p.amount),0);
+        return [x.name||"—",x.date||"—",printMoney(x.amount),
+          printMoney(Math.max(0,Number(x.amount)-paid)),x.due||"—",x.status||"Pending"];
+      })
+    };
+  }
+  if(type==="loans"){
+    return {
+      title:"Loans Report",
+      headers:["Loan","Date","Lender","Original Amount","Remaining","Due Date"],
+      rows:state.loans.map(x=>{
+        const repaid=state.spending.filter(p=>p.linkType==="loan"&&String(p.linkId)===String(x.id))
+          .reduce((a,p)=>a+Number(p.amount),0);
+        return [x.name||"—",x.date||"—",x.lender||"—",printMoney(x.amount),
+          printMoney(Math.max(0,Number(x.amount)-repaid)),x.due||"—"];
+      })
+    };
+  }
+  return null;
+}
+
+let selectedPrintType=null;
+let lastPdfUrl=null;
+
+function ensureJsPdf(){
+  return new Promise((resolve,reject)=>{
+    if(window.jspdf && window.jspdf.jsPDF){resolve(window.jspdf.jsPDF);return}
+    const existing=document.getElementById("jspdfLoader");
+    if(existing){
+      existing.addEventListener("load",()=>resolve(window.jspdf.jsPDF),{once:true});
+      existing.addEventListener("error",reject,{once:true});
+      return;
+    }
+    const script=document.createElement("script");
+    script.id="jspdfLoader";
+    script.src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
+    script.onload=()=>resolve(window.jspdf.jsPDF);
+    script.onerror=()=>reject(new Error("PDF library could not load."));
+    document.head.appendChild(script);
+  });
+}
+
+function drawPdfTable(doc,headers,rows,startY){
+  const margin=36;
+  const pageW=doc.internal.pageSize.getWidth();
+  const usable=pageW-margin*2;
+  const widths=headers.map(()=>usable/headers.length);
+  let y=startY;
+
+  doc.setFontSize(9);
+  doc.setFont(undefined,"bold");
+  headers.forEach((h,i)=>{
+    doc.text(String(h),margin+widths[i]*i,y);
+  });
+  y+=8;
+  doc.setFont(undefined,"normal");
+
+  rows.forEach(row=>{
+    const lines=row.map((v,i)=>doc.splitTextToSize(String(v),Math.max(30,widths[i]-6)));
+    const rowH=Math.max(...lines.map(a=>a.length))*6+5;
+    if(y+rowH>doc.internal.pageSize.getHeight()-36){
+      doc.addPage(); y=42;
+      doc.setFont(undefined,"bold");
+      headers.forEach((h,i)=>doc.text(String(h),margin+widths[i]*i,y));
+      y+=8; doc.setFont(undefined,"normal");
+    }
+    lines.forEach((cell,i)=>cell.forEach((line,j)=>{
+      doc.text(line,margin+widths[i]*i,y+j*6);
+    }));
+    y+=rowH;
+  });
+  return y;
+}
+
+async function createPdfBlob(type){
+  const JsPDF=await ensureJsPdf();
+  const doc=new JsPDF({unit:"pt",format:"a4"});
+  const info=printRows(type);
+  const name=(state.profileName||"").trim();
+  let y=48;
+
+  doc.setFont(undefined,"bold");
+  doc.setFontSize(18);
+  doc.text(info?info.title:"Finance Tracker Report",40,y);
+  y+=22;
+  doc.setFont(undefined,"normal");
+  doc.setFontSize(9);
+  doc.text(`Finance Tracker${name?" • "+name:""} • ${new Date().toLocaleDateString("en-IN")}`,40,y);
+  y+=20;
+
+  if(type==="all"){
+    const c=calc();
+    doc.setFontSize(11);
+    doc.text(`Starting Balance: ${printMoney(state.startingBalance)}`,40,y); y+=16;
+    doc.text(`Total Received: ${printMoney(c.received)}`,40,y); y+=16;
+    doc.text(`Total Spent: ${printMoney(c.spending)}`,40,y); y+=16;
+    doc.text(`Current Balance: ${printMoney(c.balance)}`,40,y); y+=24;
+
+    for(const t of ["scholarships","relatives","spending","bills","loans"]){
+      const d=printRows(t);
+      if(!d)continue;
+      doc.setFont(undefined,"bold"); doc.setFontSize(13); doc.text(d.title,40,y); y+=16;
+      y=drawPdfTable(doc,d.headers,d.rows,y)+18;
+    }
+  }else if(info){
+    y=drawPdfTable(doc,info.headers,info.rows,y);
+  }
+
+  return doc.output("blob");
+}
+
+function selectPrintReport(type){
+  selectedPrintType=type;
+  const info=printRows(type);
+  $("selectedPrintReport").innerHTML=`<strong>${escPrint(info?info.title:"Complete Finance Report")}</strong><br>Ready to preview or download as PDF.`;
+  $("printActions").style.display="flex";
+}
+
+async function previewSelectedPdf(){
+  if(!selectedPrintType)return;
+  try{
+    const blob=await createPdfBlob(selectedPrintType);
+    if(lastPdfUrl)URL.revokeObjectURL(lastPdfUrl);
+    lastPdfUrl=URL.createObjectURL(blob);
+    $("pdfPreviewFrame").src=lastPdfUrl;
+    $("pdfPreviewPanel").style.display="block";
+    $("pdfPreviewPanel").scrollIntoView({behavior:"smooth",block:"start"});
+    toast("PDF preview ready.");
+  }catch(e){
+    console.error(e);
+    toast("Could not create PDF preview.");
+  }
+}
+
+async function downloadSelectedPdf(){
+  if(!selectedPrintType)return;
+  try{
+    const blob=await createPdfBlob(selectedPrintType);
+    const url=URL.createObjectURL(blob);
+    const filename=`finance-tracker-${selectedPrintType}-${new Date().toISOString().slice(0,10)}.pdf`;
+    const a=document.createElement("a");
+    a.href=url; a.download=filename; a.style.display="none";
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},5000);
+    toast("PDF download started.");
+  }catch(e){
+    console.error(e);
+    toast("Could not create PDF.");
+  }
+}
+
+$("printProfileBtn").addEventListener("click",()=>showPage("print"));
+document.querySelectorAll(".print-option").forEach(btn=>{
+  btn.addEventListener("click",()=>selectPrintReport(btn.dataset.print));
+});
+$("previewPdfBtn").addEventListener("click",previewSelectedPdf);
+$("closePdfPreviewBtn").addEventListener("click",()=>{
+  $("pdfPreviewPanel").style.display="none";
+  $("pdfPreviewFrame").src="about:blank";
+});
+$("downloadPdfBtn").addEventListener("click",downloadSelectedPdf);
+document.querySelectorAll("[data-back-profile]").forEach(btn=>{
+  btn.addEventListener("click",()=>showPage("profile"));
+});
+
+renderAll();
+</script>
+<!-- FINANCE_TRACKER_FINAL_BUILD -->
+<div id="printReport" style="display:none"></div></body>
+</html>
